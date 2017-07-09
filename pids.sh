@@ -63,47 +63,49 @@ function install_geoip() {
 	ln -s /usr/share/GeoIP/GeoLiteCityv6.dat /usr/share/GeoIP/GeoIPCityv6.dat 
 } 
  
-function config_ssmtp() 
-{
-Info "Configuring SSMTP"
-echo "
-root=$notification
-mailhub=$smtp_server:587
-hostname=foxhound
-FromLineOverride=YES
-UseTLS=NO
-UseSTARTTLS=YES
-AuthUser=$smtp_user
-AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
+function config_ssmtp() {
+	Info "Configuring SSMTP"
+	echo "
+	root=$notification
+	mailhub=$smtp_server:587
+	hostname=foxhound
+	FromLineOverride=YES
+	UseTLS=NO
+	UseSTARTTLS=YES
+	AuthUser=$smtp_user
+	AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
 }
 
 
 function install_loki() {
 	Info "Installing YARA packages"
 	Info "Installing Pylzma"
-		cd /opt/
+	pushd /opt/
 		wget  https://pypi.python.org/packages/fe/33/9fa773d6f2f11d95f24e590190220e23badfea3725ed71d78908fbfd4a14/pylzma-0.4.8.tar.gz 
 		tar -zxvf pylzma-0.4.8.tar.gz
-		cd pylzma-0.4.8/
-		python ez_setup.py 
-		python setup.py 
-	Info "Installing YARA"
-		git clone  https://github.com/VirusTotal/yara.git /opt/yara
-		cd /opt/yara
-		./bootstrap.sh 
-		./configure 
-		make && make install 
+		pushd pylzma-0.4.8/
+			python ez_setup.py
+			python setup.py
+		popd
+		Info "Installing YARA"
+		git clone  https://github.com/VirusTotal/yara.git
+		pushd yara/
+			./bootstrap.sh
+			./configure
+			make && make install
+		popd
+	popd
 	Info "Installing PIP LOKI Packages"
-		pip install psutil
-		pip install yara-python
-		pip install gitpython
-		pip install pylzma
-		pip install netaddr
+	pip install psutil
+	pip install yara-python
+	pip install gitpython
+	pip install pylzma
+	pip install netaddr
 	Info "Installing LOKI"
-		git clone  https://github.com/Neo23x0/Loki.git /pids/Loki
-		git clone  https://github.com/Neo23x0/signature-base.git /pids/Loki/signature-base/ 
-		echo "export PATH=/pids/Loki:$PATH" >> /etc/profile
-		chmod +x /pids/Loki/loki.py
+	git clone  https://github.com/Neo23x0/Loki.git /pids/Loki
+	git clone  https://github.com/Neo23x0/signature-base.git /pids/Loki/signature-base/
+	echo "export PATH=/pids/Loki:$PATH" >> /etc/profile
+	chmod +x /pids/Loki/loki.py
 	echo "
 #!/bin/sh
 /usr/bin/python /pids/Loki/loki.py --noprocscan --dontwait --onlyrelevant -p /pids/bro/extracted -l /pids/Loki/log
@@ -113,35 +115,37 @@ function install_loki() {
 
 function install_bro() {
 	Info "Installing Bro"
-	cd /opt/
+	pushd /opt/
 		wget  https://www.bro.org/downloads/release/bro-2.5.1.tar.gz 
 		tar -xzf bro-2.5.1.tar.gz
-	cd bro-2.4.1 
-		./configure --localstatedir=/pids/bro/
-		make -j 4 
-		make install 
-	Info "Setting Bro variables"
-	echo "export PATH=/usr/local/bro/bin:$PATH" >> /etc/profile
-	source ~/.bashrc
-	Info "Cleaning up Bro"
-	rm bro-2.5.1.tar.gz
-	rm -rf bro-2.5.1/
+		pushd bro-2.4.1
+			./configure --localstatedir=/pids/bro/
+			make -j 4
+			make install
+		popd
+		Info "Setting Bro variables"
+		echo "export PATH=/usr/local/bro/bin:$PATH" >> /etc/profile
+		source ~/.bashrc
+		Info "Cleaning up Bro"
+		rm bro-2.5.1.tar.gz
+		rm -rf bro-2.5.1/
+	popd
 }
 
 function install_criticalstack() {
 	Info "Installing Critical Stack Agent"
-		wget  http://intel.criticalstack.com/client/critical-stack-intel-arm.deb 
-		dpkg -i critical-stack-intel-arm.deb 
-		sudo -u critical-stack critical-stack-intel api $api 
-		rm critical-stack-intel-arm.deb
-		sudo -u critical-stack critical-stack-intel list
-		sudo -u critical-stack critical-stack-intel pull
-		#Deploy and start BroIDS
-		export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
+	wget  http://intel.criticalstack.com/client/critical-stack-intel-arm.deb
+	dpkg -i critical-stack-intel-arm.deb
+	sudo -u critical-stack critical-stack-intel api $api
+	rm critical-stack-intel-arm.deb
+	sudo -u critical-stack critical-stack-intel list
+	sudo -u critical-stack critical-stack-intel pull
+	#Deploy and start BroIDS
+	export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
 	echo "Deploying and starting BroIDS"
-		broctl deploy
-		broctl cron enable
-		#Create update script
+	broctl deploy
+	broctl cron enable
+	#Create update script
 echo "
 echo \"#### Pulling feed update ####\"
 sudo -u critical-stack critical-stack-intel pull
@@ -152,7 +156,7 @@ echo \"#### Restarting bro ####\"
 broctl restart
 python /pids/Loki/loki.py --update
 " \ > /pids/scripts/update
-		sudo chmod +x /pids/scripts/update
+	sudo chmod +x /pids/scripts/update
 }
 
 function install_es() {
