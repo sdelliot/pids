@@ -155,6 +155,8 @@ broctl install
 echo \"#### Restarting bro ####\"
 broctl restart
 python /pids/Loki/loki.py --update
+python /pids/scripts/pullTorIP.py
+python /pids/scripts/pullMaliciousIP.py
 " \ > /pids/scripts/update
 	sudo chmod +x /pids/scripts/update
 }
