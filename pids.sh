@@ -150,8 +150,8 @@ broctl check
 broctl install
 echo \"#### Restarting bro ####\"
 broctl restart
-python /nsm/Loki/loki.py --update
-" \ > /nsm/scripts/update
+python /pids/Loki/loki.py --update
+" \ > /pids/scripts/update
 		sudo chmod +x /pids/scripts/update
 }
 
@@ -280,9 +280,9 @@ service logstash restart
 
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
-echo "0-59/5 * * * * root /nsm/scripts/cleanup" >> /etc/crontab
-echo "00 7/19 * * *  root /nsm/scripts/update" >> /etc/crontab
-echo "0-59/5 * * * * root python /nsm/scripts/scan" >> /etc/crontab 
+echo "0-59/5 * * * * root /pids/scripts/cleanup" >> /etc/crontab
+echo "00 7/19 * * *  root /pids/scripts/update" >> /etc/crontab
+echo "0-59/5 * * * * root python /pids/scripts/scan" >> /etc/crontab 
 
 #TODO: auto pull sweet sec scripts
 #Add cron for starting elk
