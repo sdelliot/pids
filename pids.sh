@@ -265,18 +265,18 @@ function config_sweet_security_scripts() {
 	python /pids/scripts/pullMaliciousIP.py
 }
 
-install_geoip
 install_packages
-config_net_ipv6
-config_net_opts
-install_netsniff
-create_service_netsniff
+install_geoip
 config_ssmtp
 install_loki
 install_bro
 install_criticalstack
+install_es
+install_logstash
+install_kibana
 install_bro_reporting
 config_bro_scripts
+config_sweet_security_scripts
 
 #Restart services
 Info "Restarting ELK services"
@@ -286,11 +286,9 @@ service logstash restart
 
 #CRON JOBS
 echo "0-59/5 * * * * root /usr/local/bro/bin/broctl cron" >> /etc/crontab
-echo "0-59/5 * * * * root /pids/scripts/cleanup" >> /etc/crontab
 echo "00 7/19 * * *  root /pids/scripts/update" >> /etc/crontab
 echo "0-59/5 * * * * root python /pids/scripts/scan" >> /etc/crontab 
 
-#TODO: auto pull sweet sec scripts
 #Add cron for starting elk
 
 Info "Please reboot"
