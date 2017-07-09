@@ -27,8 +27,8 @@ smtp_server=${smtp_server:-smtp.google.com}
 read -p "Please enter your SMTP Port (587): " smtp_port
 smtp_port=${smtp_port:-587}
 
-read -p "Please enter your email Address (email@gmail.com): " emailAddr
-emailAddr=${emailAddr:-email@google.com}
+read -p "Please enter your email Address (email@gmail.com): " smtp_email
+smtp_email=${smtp_email:-email@google.com}
 
 read -p "Please enter your email Password (P@55word): " smtp_pass
 smtp_pass=${smtp_pass:-P@55word}
@@ -66,13 +66,13 @@ function install_geoip() {
 function config_ssmtp() {
 	Info "Configuring SSMTP"
 	echo "
-	root=$notification
+	root=$smtp_email
 	mailhub=$smtp_server:587
 	hostname=foxhound
 	FromLineOverride=YES
 	UseTLS=NO
 	UseSTARTTLS=YES
-	AuthUser=$smtp_user
+	AuthUser=$smtp_email
 	AuthPass=$smtp_pass" \ > /etc/ssmtp/ssmtp.conf
 }
 
@@ -193,7 +193,7 @@ function install_logstash() {
 	mkdir /etc/logstash/translate
 	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /opt/logstash/logstash.conf
 	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /opt/logstash/logstash.conf
-	sed -i -- "s/EMAIL_USER/"$emailAddr"/g" /opt/logstash/logstash.conf
+	sed -i -- "s/EMAIL_USER/"$smtp_email"/g" /opt/logstash/logstash.conf
 	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /opt/logstash/logstash.conf
 }
 
@@ -255,7 +255,7 @@ function config_sweet_security_scripts() {
 	#Configure Network Discovery Scripts
 	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /opt/SweetSecurity/networkDiscovery.py
 	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /opt/SweetSecurity/networkDiscovery.py
-	sed -i -- "s/EMAIL_USER/"$emailAddr"/g" /opt/SweetSecurity/networkDiscovery.py
+	sed -i -- "s/EMAIL_USER/"$smtp_email"/g" /opt/SweetSecurity/networkDiscovery.py
 	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /opt/SweetSecurity/networkDiscovery.py
 
 	#Run scripts for the first time
