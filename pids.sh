@@ -191,9 +191,9 @@ function install_logstash() {
 	popd
 	update-rc.d logstash defaults
 	/opt/logstash/bin/plugin install logstash-filter-translate
-	cp ./logstash.conf /etc/logstash/conf.d
+	cp $_scriptDir/logstash.conf /etc/logstash/conf.d
 	mkdir /etc/logstash/custom_patterns
-	cp ./bro.rule /etc/logstash/custom_patterns
+	cp $_scriptDir/bro.rule /etc/logstash/custom_patterns
 	mkdir /etc/logstash/translate
 	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /opt/logstash/logstash.conf
 	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /opt/logstash/logstash.conf
@@ -215,7 +215,7 @@ function install_kibana() {
 	ln -s /usr/local/bin/node /opt/kibana/node/bin/node
 	ln -s /usr/local/bin/npm /opt/kibana/node/bin/npm
 	rm node_latest_armhf.deb
-	cp ./init.d/kibana /etc/init.d
+	cp $_scriptDir/init.d/kibana /etc/init.d
 	chmod 755 /etc/init.d/kibana
 	update-rc.d kibana defaults
 }
@@ -253,10 +253,10 @@ function config_bro_scripts() {
 
 function config_sweet_security_scripts() {
 	Info "Configuring Sweet Security Scripts"
-	cp ./pullMaliciousIP.py /pids/scripts/
-	cp ./pullTorIP.py /pids/scripts/
-	cp ./networkDiscovery.py /pids/scripts/
-	cp ./SweetSecurityDB.py /pids/scripts/
+	cp $_scriptDir/pullMaliciousIP.py /pids/scripts/
+	cp $_scriptDir/pullTorIP.py /pids/scripts/
+	cp $_scriptDir/networkDiscovery.py /pids/scripts/
+	cp $_scriptDir/SweetSecurityDB.py /pids/scripts/
 	#Configure Network Discovery Scripts
 	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /opt/SweetSecurity/networkDiscovery.py
 	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /opt/SweetSecurity/networkDiscovery.py
