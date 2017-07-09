@@ -161,6 +161,7 @@ python /pids/scripts/pullMaliciousIP.py
 	sudo chmod +x /pids/scripts/update
 }
 
+# TODO: Update ES to latest: 5.5
 function install_es() {
 	Info "Installing ElasticSearch"
 	pushd /opt/
@@ -171,6 +172,7 @@ function install_es() {
 	popd
 }
 
+# Update Logstash to latest
 function install_logstash() {
 	Info "Installing Logstash"
 	pushd /opt/
@@ -199,6 +201,7 @@ function install_logstash() {
 	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /opt/logstash/logstash.conf
 }
 
+# Update Kibana to latest
 function install_kibana() {
 	Info "Installing Kibana"
 	wget https://download.elastic.co/kibana/kibana/kibana-4.5.0-linux-x86.tar.gz
