@@ -68,7 +68,7 @@ function config_ssmtp() {
 	echo "
 	root=$smtp_email
 	mailhub=$smtp_server:587
-	hostname=foxhound
+	hostname=pids
 	FromLineOverride=YES
 	UseTLS=NO
 	UseSTARTTLS=YES
