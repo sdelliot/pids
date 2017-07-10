@@ -162,7 +162,7 @@ python /pids/scripts/pullMaliciousIP.py
 function install_es() {
 	Info "Installing ElasticSearch"
 	pushd /opt/
-		wget  wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.3.2.deb
+		wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-2.3.2.deb
 		dpkg -i elasticsearch-2.3.2.deb
 		rm elasticsearch-2.3.2.deb
 		update-rc.d elasticsearch defaults
