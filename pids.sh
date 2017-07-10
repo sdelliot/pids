@@ -192,10 +192,10 @@ function install_logstash() {
 	mkdir /etc/logstash/custom_patterns
 	cp $_scriptDir/bro.rule /etc/logstash/custom_patterns
 	mkdir /etc/logstash/translate
-	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /opt/logstash/logstash.conf
-	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /opt/logstash/logstash.conf
-	sed -i -- "s/EMAIL_USER/"$smtp_email"/g" /opt/logstash/logstash.conf
-	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /opt/logstash/logstash.conf
+	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /etc/logstash/conf.d/logstash.conf
+	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /etc/logstash/conf.d/logstash.conf
+	sed -i -- "s/EMAIL_USER/"$smtp_email"/g" /etc/logstash/conf.d/logstash.conf
+	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /etc/logstash/conf.d/logstash.conf
 }
 
 # Update Kibana to latest
@@ -258,10 +258,10 @@ function config_sweet_security_scripts() {
 	cp $_scriptDir/networkDiscovery.py /pids/scripts/
 	cp $_scriptDir/SweetSecurityDB.py /pids/scripts/
 	#Configure Network Discovery Scripts
-	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /opt/SweetSecurity/networkDiscovery.py
-	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /opt/SweetSecurity/networkDiscovery.py
-	sed -i -- "s/EMAIL_USER/"$smtp_email"/g" /opt/SweetSecurity/networkDiscovery.py
-	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /opt/SweetSecurity/networkDiscovery.py
+	sed -i -- "s/SMTP_HOST/"$smtp_server"/g" /pids/scripts/networkDiscovery.py
+	sed -i -- "s/SMTP_PORT/"$smtp_port"/g" /pids/scripts/networkDiscovery.py
+	sed -i -- "s/EMAIL_USER/"$smtp_email"/g" /pids/scripts/networkDiscovery.py
+	sed -i -- "s/EMAIL_PASS/"$smtp_pass"/g" /pids/scripts/networkDiscovery.py
 
 	#Run scripts for the first time
 	python /pids/scripts/pullTorIP.py
