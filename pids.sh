@@ -140,11 +140,8 @@ function install_criticalstack() {
 	rm critical-stack-intel-arm.deb
 	sudo -u critical-stack critical-stack-intel list
 	sudo -u critical-stack critical-stack-intel pull
-	#Deploy and start BroIDS
-	export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
-	echo "Deploying and starting BroIDS"
-	broctl deploy
-	broctl cron enable
+	# Create an update script
+	sudo -u critical-stack critical-stack-intel config --set bro.restart=true
 	#Create update script
 echo "
 echo \"#### Pulling feed update ####\"
@@ -247,7 +244,10 @@ function config_bro_scripts() {
 		git clone https://github.com/sneakymonk3y/bro-scripts.git 
 		echo "@load bro-scripts/geoip"  >> /usr/local/bro/share/bro/site/local.bro
 		echo "@load bro-scripts/extract"  >> /usr/local/bro/share/bro/site/local.bro
+		echo "Deploying and starting BroIDS"
+		export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/bro/bin:\$PATH"
 		broctl deploy
+		broctl cron enable
 	popd
 }
 
