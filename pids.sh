@@ -116,9 +116,9 @@ function install_loki() {
 function install_bro() {
 	Info "Installing Bro"
 	pushd /opt/
-		wget  https://www.bro.org/downloads/release/bro-2.5.1.tar.gz 
+		wget https://www.bro.org/downloads/bro-2.5.1.tar.gz
 		tar -xzf bro-2.5.1.tar.gz
-		pushd bro-2.4.1
+		pushd bro-2.5.1
 			./configure --localstatedir=/pids/bro/
 			make -j 4
 			make install
