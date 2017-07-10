@@ -204,6 +204,7 @@ function install_kibana() {
 	wget https://download.elastic.co/kibana/kibana/kibana-4.5.0-linux-x86.tar.gz
 	tar -xzf kibana-4.5.0-linux-x86.tar.gz
 	mv kibana-4.5.0-linux-x86/ /opt/kibana/
+	rm kibana-4.5.0-linux-x86.tar.gz
 	apt-get -y remove nodejs-legacy nodejs nodered		#Remove nodejs on Pi3
 	wget http://node-arm.herokuapp.com/node_latest_armhf.deb
 	dpkg -i node_latest_armhf.deb
